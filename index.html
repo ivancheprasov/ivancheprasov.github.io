@@ -44,13 +44,38 @@
             width: 30%;
         }
     </style>
+    <script>
+      const transform = async ({ xmlPath, stylesheetPath }) => {
+        const xsltStylesheet = await fetch(stylesheetPath).then(response => response.text());
+        const xml = await fetch(xmlPath).then(response => response.text());
+
+        const parser = new DOMParser();
+        const xsltStylesheetNode = parser.parseFromString(xsltStylesheet, 'text/xml');
+        const xmlDocument = parser.parseFromString(xml, 'text/xml');
+
+        const xsltProcessor = new XSLTProcessor();
+        xsltProcessor.importStylesheet(xsltStylesheetNode);
+
+        const result = new XMLSerializer().serializeToString(
+          xsltProcessor.transformToDocument(xmlDocument),
+        );
+
+        const resultHTML = parser.parseFromString(result, "text/html");
+        resultHTML.getElementById('original-content').innerText = xml;
+        const newHTML = document.open('text/html', 'replace');
+        newHTML.write(resultHTML.documentElement.innerHTML);
+        newHTML.close();
+      }
+    </script>
 </head>
 <body>
 <div class="menu__wrapper">
     <h1>Чепрасов Иван P4110</h1>
     <div class="menu">
-        <button onclick="window.location.href='math-ml-result.html'">Задание 1</button>
-        <button onclick="window.location.href='svg-result.html'">Задание 2</button>
+        <button onclick="transform({xmlPath: './math-ml.xml', stylesheetPath: './math-ml-template.xsl'})">
+            Задание 1
+        </button>
+        <button onclick="transform({xmlPath: './svg.xml', stylesheetPath: './svg-template.xsl'})">Задание 2</button>
     </div>
 </div>
 </body>

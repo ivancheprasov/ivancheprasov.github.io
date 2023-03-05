@@ -7,11 +7,22 @@
                 <title>MathML</title>
                 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6">;</script>
                 <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">;</script>
+                <style>
+                    .section__header {
+                        border: 1px solid red;
+                        width: fit-content;
+                        padding: 10px;
+                        margin: 10px 0;
+                    }
+                </style>
             </head>
             <body>
+                <div class="section__header">Result</div>
                 <math xmlns="http://www.w3.org/1998/Math/MathML">
                     <xsl:apply-templates/>
                 </math>
+                <div class="section__header">Original Content</div>
+                <div id="original-content"/>
             </body>
         </html>
     </xsl:template>
